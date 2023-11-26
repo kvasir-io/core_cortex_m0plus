@@ -1,0 +1,1718 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<device xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.3.5" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_3_5.xsd">
+    <name>CM0+</name>
+    <cpu>
+        <name>CM0+</name>
+        <revision>r0p0</revision>
+        <endian>selectable</endian>
+        <mpuPresent>true</mpuPresent>
+        <fpuPresent>false</fpuPresent>
+        <nvicPrioBits>2</nvicPrioBits>
+        <vendorSystickConfig>false</vendorSystickConfig>
+    </cpu>
+    <addressUnitBits>8</addressUnitBits>
+    <width>32</width>
+    <size>32</size>
+    <access>read-write</access>
+    <resetValue>0x00000000</resetValue>
+    <resetMask>0xFFFFFFFF</resetMask>
+    <peripherals>
+        <peripheral>
+            <name>DWT</name>
+            <description>Data Watchpoint and Trace</description>
+            <groupName/>
+            <baseAddress>0xE0001000</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x1000</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>Control register</name>
+                    <displayName>DWT_CTRL</displayName>
+                    <description>Provides configuration and status information for the DWT unit, and used to control features of the unit</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-only</access>
+                    <fields>
+                        <field>
+                            <name>NUMCOMP</name>
+                            <description>Number of comparators implemented</description>
+                            <bitRange>[31:28]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Program Counter Sample Register</name>
+                    <displayName>DWT_PCSR</displayName>
+                    <description>Samples the current value of the program counter</description>
+                    <addressOffset>0x1C</addressOffset>
+                    <access>read-only</access>
+                    <fields>
+                        <field>
+                            <name>EIASAMPLE</name>
+                            <description>Executed Instruction Address sample value</description>
+                            <bitRange>[31:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Comparator register</name>
+                    <displayName>DWT_COMP_%s</displayName>
+                    <description>Provides a reference value for use by comparator n</description>
+                    <addressOffset>0x20</addressOffset>
+                    <access>read-write</access>
+                    <dim>8</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <fields>
+                        <field>
+                            <name>COMP</name>
+                            <description>Reference value for comparison</description>
+                            <bitRange>[31:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Comparator Mask register %s</name>
+                    <displayName>DWT_MASK_%s</displayName>
+                    <description>Provides the size of the ignore mask applied to the access address for address range matching by comparator n</description>
+                    <addressOffset>0x24</addressOffset>
+                    <access>read-write</access>
+                    <dim>8</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <fields>
+                        <field>
+                            <name>MASK</name>
+                            <description>The size of the ignore mask, 0-31 bits, applied to address range matching</description>
+                            <bitRange>[4:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Comparator Function register %s</name>
+                    <displayName>DWT_FUNCTION_%s</displayName>
+                    <description>Controls the operation of comparator n</description>
+                    <addressOffset>0x28</addressOffset>
+                    <access>read-write</access>
+                    <dim>8</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <fields>
+                        <field>
+                            <name>MATCHED</name>
+                            <description>Comparator match</description>
+                            <bitRange>[24:24]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No match</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Match</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>FUNCTION</name>
+                            <description>Selects action taken on comparator match</description>
+                            <bitRange>[3:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>BPU</name>
+            <description>Breakpoint Unit</description>
+            <groupName/>
+            <baseAddress>0xE0002000</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x1000</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>Breakpoint Control Register</name>
+                    <displayName>BPU_CTRL</displayName>
+                    <description>Provides BPU implementation information, and the global enable for the BPU</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>NUM_CODE</name>
+                            <description>The number of breakpoint comparators</description>
+                            <bitRange>[7:4]</bitRange>
+                        </field>
+                        <field>
+                            <name>KEY</name>
+                            <description>On any write to FP_CTRL, this bit must be 1</description>
+                            <bitRange>[1:1]</bitRange>
+                        </field>
+                        <field>
+                            <name>ENABLE</name>
+                            <description>Enable bit for the FPB</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Flash Patch Breakpoint disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Flash Patch Breakpoint enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Breakpoint Comparator Register %s</name>
+                    <displayName>BPU_COMP_%s</displayName>
+                    <description>
+                Holds a breakpoint address for comparison with instruction addresses in the Code
+                memory region
+              </description>
+                    <addressOffset>0x8</addressOffset>
+                    <access>read-write</access>
+                    <dim>8</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <fields>
+                        <field>
+                            <name>BPU_MATCH</name>
+                            <description>defines the behavior when the COMP address is matched</description>
+                            <bitRange>[31:30]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>no breakpoint matching</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Breakpoint on lower halfword, upper is unaffected</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Breakpoint on upper halfword, lower is unaffected</description>
+                                    <value>10</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Breakpoint on both lower and upper halfwords</description>
+                                    <value>11</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>COMP</name>
+                            <description>Stores bits [28:2] of the comparison address</description>
+                            <bitRange>[28:2]</bitRange>
+                        </field>
+                        <field>
+                            <name>BE</name>
+                            <description>enables the comperator</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>ICB</name>
+            <description>Implementation Control Block</description>
+            <groupName/>
+            <baseAddress>0xE000E008</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0xC</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>Auxiliary Control Register</name>
+                    <displayName>ACTLR</displayName>
+                    <description>Provides IMPLEMENTATION DEFINED configuration and control options</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-write</access>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>SYSTICK</name>
+            <description>SysTick Timer</description>
+            <groupName/>
+            <baseAddress>0xE000E010</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x10</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>SysTick Control and Status Register</name>
+                    <displayName>SYSTICK_CSR</displayName>
+                    <description>Controls the system timer and provides status data</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>COUNTFLAG</name>
+                            <description>Indicates whether the counter has counted to 0 since the last read of this register</description>
+                            <bitRange>[16:16]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Timer has not counted to 0</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Timer has counted to 0</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>CLKSOURCE</name>
+                            <description>Indicates the SysTick clock source</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <name>external</name>
+                                    <description>SysTick uses the IMPLEMENTATION DEFINED external reference clock</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>processor</name>
+                                    <description>SysTick uses the processor clock</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>TICKINT</name>
+                            <description>Indicates whether counting to 0 causes the status of the SysTick exception to change to pending</description>
+                            <bitRange>[1:1]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <name>interrupt_disabled</name>
+                                    <description>Count to 0 does not affect the SysTick exception status</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>interrupt_enabled</name>
+                                    <description>Count to 0 changes the SysTick exception status to pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>ENABLE</name>
+                            <description>Indicates the enabled status of the SysTick counter</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Counter is disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Counter is operating</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>SysTick Reload Value Register</name>
+                    <displayName>SYSTICK_RVR</displayName>
+                    <description>Holds the reload value of the SYSTICK_CVR</description>
+                    <addressOffset>0x4</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>RELOAD</name>
+                            <description>The value to load into the SYSTICK_CVR when the counter reaches 0</description>
+                            <bitRange>[23:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>SysTick Current Value Register</name>
+                    <displayName>SYSTICK_CVR</displayName>
+                    <description>Reads or clears the current counter value</description>
+                    <addressOffset>0x8</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>CURRENT</name>
+                            <description>Current counter value</description>
+                            <bitRange>[31:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>SysTick Calibration value Register</name>
+                    <displayName>SYSTICK_CALIB</displayName>
+                    <description>Reads the calibration value and parameters for SysTick</description>
+                    <addressOffset>0xC</addressOffset>
+                    <access>read-only</access>
+                    <fields>
+                        <field>
+                            <name>NOREF</name>
+                            <description>Indicates whether the IMPLEMENTATION DEFINED reference clock is implemented</description>
+                            <bitRange>[31:31]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>The reference clock is implemented</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>The reference clock is not implemented</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>SKEW</name>
+                            <description>Indicates whether the 10ms calibration value is exact</description>
+                            <bitRange>[30:30]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>10ms calibration value is exact</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>10ms calibration value is inexact, because of the clock frequency</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>TENMS</name>
+                            <description>Optionally, holds a reload value to be used for 10ms (100Hz) timing, subject to system clock skew errors</description>
+                            <bitRange>[23:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>NVIC</name>
+            <description>Nested Vectored Interrupt Controller</description>
+            <groupName/>
+            <baseAddress>0xE000E100</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x4F0</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>Interrupt Set-Enable Register %s</name>
+                    <displayName>NVIC_ISER_%s</displayName>
+                    <description>Enables, or reads the enable state of a group of interrupts</description>
+                    <addressOffset>0x0</addressOffset>
+                    <dim>16</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>SETENA_%s</name>
+                            <description>For register NVIC_ISERn, enables or shows the current enabled state of interrupt (m+(32*n))</description>
+                            <bitRange>[0:0]</bitRange>
+                            <dim>32</dim>
+                            <dimIncrement>1</dimIncrement>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Interrupt Clear-Enable Register %s</name>
+                    <displayName>NVIC_ICER_%s</displayName>
+                    <description>Disables, or reads the enable state of, a group of registers</description>
+                    <addressOffset>0x80</addressOffset>
+                    <dim>16</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>CLRENA_%s</name>
+                            <description>For register NVIC_ICERn, disables or shows the current enabled state of interrupt (m+(32*n))</description>
+                            <bitRange>[0:0]</bitRange>
+                            <dim>32</dim>
+                            <dimIncrement>1</dimIncrement>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Interrupt Set-Pending Register %s</name>
+                    <displayName>NVIC_ISPR_%s</displayName>
+                    <description>For a group of interrupts, changes interrupt status to pending, or shows the current pending status</description>
+                    <addressOffset>0x100</addressOffset>
+                    <dim>16</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>SETPEND_%s</name>
+                            <description>For register NVIC_ISPRn, changes the state of interrupt (m+(32*n)) to pending, or shows whether the state of the interrupt is pending</description>
+                            <bitRange>[0:0]</bitRange>
+                            <dim>32</dim>
+                            <dimIncrement>1</dimIncrement>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt is not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt is pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Interrupt Clear-Pending Register %s</name>
+                    <displayName>NVIC_ICPR_%s</displayName>
+                    <description>For a group of interrupts, clears the interrupt pending status, or shows the current pending status</description>
+                    <addressOffset>0x180</addressOffset>
+                    <dim>16</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>CLRPEND_%s</name>
+                            <description>For register NVIC_ICPRn, clears the pending state of interrupt (m+(32*n)), or shows whether the state of the interrupt is pending</description>
+                            <bitRange>[0:0]</bitRange>
+                            <dim>32</dim>
+                            <dimIncrement>1</dimIncrement>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt is not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>On reads, interrupt is pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Interrupt Priority Register %s</name>
+                    <displayName>NVIC_IPR_%s</displayName>
+                    <description>Sets or reads interrupt priorities</description>
+                    <addressOffset>0x300</addressOffset>
+                    <dim>124</dim>
+                    <dimIncrement>4</dimIncrement>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>PRI_N3</name>
+                            <description>For register NVIC_IPRn, priority of interrupt number 4n+3</description>
+                            <bitRange>[31:24]</bitRange>
+                        </field>
+                        <field>
+                            <name>PRI_N2</name>
+                            <description>For register NVIC_IPRn, priority of interrupt number 4n+2</description>
+                            <bitRange>[23:16]</bitRange>
+                        </field>
+                        <field>
+                            <name>PRI_N1</name>
+                            <description>For register NVIC_IPRn, priority of interrupt number 4n+1</description>
+                            <bitRange>[15:8]</bitRange>
+                        </field>
+                        <field>
+                            <name>PRI_N0</name>
+                            <description>For register NVIC_IPRn, priority of interrupt number 4n</description>
+                            <bitRange>[7:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>SCB</name>
+            <description>System Control Block</description>
+            <groupName/>
+            <baseAddress>0xE000ED00</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x90</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>CPUID Base Register</name>
+                    <displayName>CPUID</displayName>
+                    <description>Provides identification information for the processor</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-only</access>
+                    <fields>
+                        <field>
+                            <name>IMPLEMENTER</name>
+                            <description>Implementer code assigned by ARM</description>
+                            <bitRange>[31:24]</bitRange>
+                        </field>
+                        <field>
+                            <name>VARIANT</name>
+                            <description>IMPLEMENTATION DEFINED variant number</description>
+                            <bitRange>[23:20]</bitRange>
+                        </field>
+                        <field>
+                            <name>ARCHITECTURE</name>
+                            <description>Reads as 0xF</description>
+                            <bitRange>[19:16]</bitRange>
+                        </field>
+                        <field>
+                            <name>PARTNO</name>
+                            <description>IMPLEMENTATION DEFINED part number</description>
+                            <bitRange>[15:4]</bitRange>
+                        </field>
+                        <field>
+                            <name>REVISION</name>
+                            <description>IMPLEMENTATION DEFINED revision number</description>
+                            <bitRange>[3:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Interrupt Control and State Register</name>
+                    <displayName>ICSR</displayName>
+                    <description>Provides software control of the NMI, PendSV, and SysTick exceptions, and provides interrupt status information</description>
+                    <addressOffset>0x4</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>NMIPENDSET</name>
+                            <description>On writes, makes the NMI exception active</description>
+                            <bitRange>[31:31]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <name>cleared</name>
+                                    <description>On writes, has no effect. On reads, NMI is inactive</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>set_pending</name>
+                                    <description>On writes, make the NMI exception active. On reads, NMI is active</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>PENDSVSET</name>
+                            <description>On writes, sets the PendSV exception as pending</description>
+                            <bitRange>[28:28]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <name>cleared</name>
+                                    <description>On writes, has no effect. On reads, PendSV is not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>set_pending</name>
+                                    <description>On writes, make PendSV exception pending. On reads, PendSV is pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>PENDSVCLR</name>
+                            <description>Removes the pending status of the PendSV exception</description>
+                            <bitRange>[27:27]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No effect</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>clear</name>
+                                    <description>Remove pending status</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>PENDSTSET</name>
+                            <description>On writes, sets the SysTick exception as pending</description>
+                            <bitRange>[26:26]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <name>cleared</name>
+                                    <description>On writes, has no effect. On reads, SysTick is not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>set_pending</name>
+                                    <description>On writes, make SysTick exception pending. On reads, SysTick is pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>PENDSTCLR</name>
+                            <description>Removes the pending status of the SysTick exception</description>
+                            <bitRange>[25:25]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No effect</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <name>clear</name>
+                                    <description>Remove pending status</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>ISRPREEMPT</name>
+                            <description>Indicates whether a pending exception will be serviced on exit from debug halt state</description>
+                            <bitRange>[23:23]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Will not service</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Will service a pending exception</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>ISRPENDING</name>
+                            <description>Indicates whether an external interrupt, generated by the NVIC, is pending</description>
+                            <bitRange>[22:22]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No external interrupt pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>External interrupt pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VECTPENDING</name>
+                            <description>The exception number of the highest priority pending and enabled interrupt</description>
+                            <bitRange>[20:12]</bitRange>
+                        </field>
+                        <field>
+                            <name>RETTOBASE</name>
+                            <description>In Handler mode, indicates whether there is an active exception other than the exception indicated by the current value of the IPSR</description>
+                            <bitRange>[11:11]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>There is an active exception other than the exception shown by IPSR</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>There is no active exception other than any exception shown by IPSR</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VECTACTIVE</name>
+                            <description>The exception number of the current executing exception</description>
+                            <bitRange>[8:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Vector Table Offset Register</name>
+                    <displayName>VTOR</displayName>
+                    <description>Holds the vector table address</description>
+                    <addressOffset>0x8</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>TBLOFF</name>
+                            <description>Bits[31:7] of the vector table address</description>
+                            <bitRange>[31:7]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Application Interrupt and Reset Control Register</name>
+                    <displayName>AIRCR</displayName>
+                    <description>Sets or returns interrupt control data</description>
+                    <addressOffset>0xC</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>VECTKEY</name>
+                            <description>Vector Key. The value 0x05FA must be written to this register.</description>
+                            <bitRange>[31:16]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Do not request a reset</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Request reset</description>
+                                    <value>0x05FA</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>ENDIANNESS</name>
+                            <description>Indicates the memory system endianness</description>
+                            <bitRange>[15:15]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Little endian</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Big endian</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>SYSRESETREQ</name>
+                            <description>System Reset Request</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Do not request a reset</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Request reset</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VECTCLRACTIVE</name>
+                            <description>Writing 1 to this bit clears all active state information for fixed and configurable exceptions</description>
+                            <bitRange>[1:1]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>System Control Register</name>
+                    <displayName>SCR</displayName>
+                    <description>Sets or returns system control data</description>
+                    <addressOffset>0x10</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>SEVONPEND</name>
+                            <description>Determines whether an interrupt transition from inactive state to pending state is a wakeup event</description>
+                            <bitRange>[4:4]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Transitions from inactive to pending are not wakeup events</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Transitions from inactive to pending are wakeup events</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>SLEEPDEEP</name>
+                            <description>Provides a qualifying hint indicating that waking from sleep might take longer</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Selected sleep state is not deep sleep</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Selected sleep state is deep sleep</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>SLEEPONEXIT</name>
+                            <description>Determines whether, on an exit from an ISR that returns to the base level of execution priority, the processor enters a sleep state</description>
+                            <bitRange>[1:1]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Do not enter sleep state</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Enter sleep state</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Configuration and Control Register</name>
+                    <displayName>CCR</displayName>
+                    <description>Sets or returns configuration and control data, and provides control over caching and branch prediction</description>
+                    <addressOffset>0x14</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>STKALIGN</name>
+                            <description>Determines whether the exception entry sequence guarantees 8-byte stack frame alignment, adjusting the SP if necessary before saving state</description>
+                            <bitRange>[9:9]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Guaranteed SP alignment is 4-byte, no SP adjustment is performed</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>8-byte alignment guaranteed, SP adjusted if necessary</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>UNALIGN_TRP</name>
+                            <description>Controls the trapping of unaligned word or halfword accesses</description>
+                            <bitRange>[3:3]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Trapping disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Trapping enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>System Handler Priority Register 2</name>
+                    <displayName>SHPR2</displayName>
+                    <description>Sets or returns priority for system handlers 8-11</description>
+                    <addressOffset>0x1C</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>PRI_11</name>
+                            <description>Priority of system handler 11, SVCall</description>
+                            <bitRange>[31:24]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>System Handler Priority Register 3</name>
+                    <displayName>SHPR3</displayName>
+                    <description>Sets or returns priority for system handlers 12-15</description>
+                    <addressOffset>0x20</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>PRI_15</name>
+                            <description>Priority of system handler 15, SysTick</description>
+                            <bitRange>[31:24]</bitRange>
+                        </field>
+                        <field>
+                            <name>PRI_14</name>
+                            <description>Priority of system handler 14, PendSV</description>
+                            <bitRange>[23:16]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>System Handler Control and State Register</name>
+                    <displayName>SHCSR</displayName>
+                    <description>Controls and provides the active and pending status of system exceptions</description>
+                    <addressOffset>0x24</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>SVCALLPENDED</name>
+                            <description/>
+                            <bitRange>[15:15]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>SVCall is not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>SVCall is pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Debug Fault Status Register</name>
+                    <displayName>DFSR</displayName>
+                    <description>Shows which debug event occurred</description>
+                    <addressOffset>0x30</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>EXTERNAL</name>
+                            <description>Indicates a debug event generated because of the assertion of an external debug request</description>
+                            <bitRange>[4:4]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No external debug request debug event</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>External debug request debug event</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VCATCH</name>
+                            <description>Indicates triggering of a Vector catch</description>
+                            <bitRange>[3:3]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No Vector catch triggered</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Vector catch triggered</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>DWTTRAP</name>
+                            <description>Indicates a debug event generated by the DWT</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No debug events generated by the DWT</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>At least one debug event generated by the DWT</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>BKPT</name>
+                            <description>Indicates a debug event generated by BKPT instruction execution or a breakpoint match in FPB</description>
+                            <bitRange>[1:1]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No breakpoint debug event</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>At least one breakpoint debug event</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>HALTED</name>
+                            <description>Indicates a debug event generated by either a halt or step request</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No halt request debug event</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halt request debug event</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>MPU</name>
+            <description>Memory Protection Unit</description>
+            <groupName/>
+            <baseAddress>0xE000ED90</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x2C</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>MPU Type Register</name>
+                    <displayName>MPU_TYPE</displayName>
+                    <description>The MPU Type Register indicates how many regions the MPU support</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-only</access>
+                    <fields>
+                        <field>
+                            <name>IREGION</name>
+                            <description>Instruction region</description>
+                            <bitRange>[23:16]</bitRange>
+                        </field>
+                        <field>
+                            <name>DREGION</name>
+                            <description>Number of regions supported by the MPU</description>
+                            <bitRange>[15:8]</bitRange>
+                        </field>
+                        <field>
+                            <name>SEPARATE</name>
+                            <description>Indicates support for separate instruction and data address maps. RAZ. ARMv6-M only supports a unified MPU</description>
+                            <bitRange>[0:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>MPU Control Register</name>
+                    <displayName>MPU_CTRL</displayName>
+                    <description>Enables the MPU, and when the MPU is enabled, controls whether the default memory map is enabled as a background region for privileged accesses, and whether the MPU is enabled for HardFaults, NMIs</description>
+                    <addressOffset>0x4</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>PRIVDEFENA</name>
+                            <description>When the ENABLE bit is set to 1, the meaning of this bit is</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Disables the default memory map</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Enables the default memory map as a background region for privileged access</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>HFNMIENA</name>
+                            <description>When the ENABLE bit is set to 1, controls whether handlers executing with priority less than 0 access memory with the MPU enabled or with the MPU disabled</description>
+                            <bitRange>[1:1]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Disables the MPU for these handlers</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Use the MPU for memory accesses by these handlers</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>ENABLE</name>
+                            <description>Enables the MPU</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>The MPU is disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>The MPU is enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>MPU Region Number Register</name>
+                    <displayName>MPU_RNR</displayName>
+                    <description>Selects the region currently accessed by MPU_RBAR and MPU_RASR</description>
+                    <addressOffset>0x8</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>REGION</name>
+                            <description>Indicates the memory region accessed by MPU_RBAR and MPU_RASR</description>
+                            <bitRange>[7:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>MPU Region Base Address Register</name>
+                    <displayName>MPU_RBAR</displayName>
+                    <description>Holds the base address of the region identified by MPU_RNR</description>
+                    <addressOffset>0xC</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>ADDR</name>
+                            <description>Base address of the region</description>
+                            <bitRange>[31:5]</bitRange>
+                        </field>
+                        <field>
+                            <name>VALID</name>
+                            <description>On writes, indicates whether the region to update is specified by MPU_RNR</description>
+                            <bitRange>[4:4]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Apply the base address update to the region specified by MPU_RNR.REGION</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>
+                        Update MPU_RNR.REGION to the value obtained by zero extending the
+                        REGION value specified in this write
+                      </description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>REGION</name>
+                            <description>On writes, can specify the number of the region to update</description>
+                            <bitRange>[3:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>MPU Region Attribute and Size Register</name>
+                    <displayName>MPU_RASR</displayName>
+                    <description>Defines the size and access behavior of the region identified by MPU_RNR, and enables that region</description>
+                    <addressOffset>0x10</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>ATTRS</name>
+                            <description>The MPU Region Attribute field</description>
+                            <bitRange>[31:16]</bitRange>
+                        </field>
+                        <field>
+                            <name>SRD</name>
+                            <description>Subregion Disable</description>
+                            <bitRange>[15:8]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Subregion enabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Subregion disabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>SIZE</name>
+                            <description>Indicates the region size</description>
+                            <bitRange>[5:1]</bitRange>
+                        </field>
+                        <field>
+                            <name>ENABLE</name>
+                            <description>Enables this region</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>When the MPU is enabled, this region is disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>When the MPU is enabled, this region is enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+        <peripheral>
+            <name>DCB</name>
+            <description>Debug Control Block</description>
+            <groupName/>
+            <baseAddress>0xE000EDF0</baseAddress>
+            <addressBlock>
+                <offset>0x0</offset>
+                <size>0x10</size>
+                <usage>registers</usage>
+            </addressBlock>
+            <registers>
+                <register>
+                    <name>Debug Halting Control and Status Register</name>
+                    <displayName>DHCSR</displayName>
+                    <description>Controls halting debug</description>
+                    <addressOffset>0x0</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>DBGKEY</name>
+                            <description>Debug key</description>
+                            <bitRange>[31:16]</bitRange>
+                        </field>
+                        <field>
+                            <name>S_RESET_ST</name>
+                            <description>Indicates whether the processor has been reset since the last read of DHCSR</description>
+                            <bitRange>[25:25]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No reset since last DHCSR read</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>At least one reset since last DHCSR read</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>S_RETIRE_ST</name>
+                            <description>Set to 1 every time the processor retires one or more instructions</description>
+                            <bitRange>[24:24]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No instruction retired since last DHCSR read</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>At least one instruction retired since last DHCSR read</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>S_LOCKUP</name>
+                            <description>Indicates whether the processor is locked up because of an unrecoverable exception</description>
+                            <bitRange>[19:19]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Not locked up</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Locked up</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>S_SLEEP</name>
+                            <description>Indicates whether the processor is sleeping</description>
+                            <bitRange>[18:18]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Not sleeping</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Sleeping</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>S_HALT</name>
+                            <description>Indicates whether the processor is in Debug state</description>
+                            <bitRange>[17:17]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>In Non-debug state</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>In Debug state</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>S_REGRDY</name>
+                            <description>A handshake flag for transfers through the DCRDR</description>
+                            <bitRange>[16:16]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>There has been a write to the DCRDR, but the transfer is not complete</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>The transfer to or from the DCRDR is complete</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>C_SNAPSTALL</name>
+                            <description>Allow imprecise entry to Debug state</description>
+                            <bitRange>[5:5]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No action</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Allow imprecise entry to Debug state, for example by forcing any stalled load or store instruction to complete</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>C_MASKINTS</name>
+                            <description>When debug is enabled, the debugger can write to this bit to mask PendSV, SysTick and external configurable interrupts</description>
+                            <bitRange>[3:3]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Do not mask</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Mask PendSV, SysTick and external configurable interrupts</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>C_STEP</name>
+                            <description>Processor step bit</description>
+                            <bitRange>[2:2]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>No effect</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Single step enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>C_HALT</name>
+                            <description>Processor halt bit</description>
+                            <bitRange>[1:1]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Causes the processor to leave Debug state, if in Debug state</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halt the processor</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>C_DEBUGEN</name>
+                            <description>Halting debug enable bit</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Debug Core Register Selector Register</name>
+                    <displayName>DCRSR</displayName>
+                    <description>provides debug access to the ARM core registers, special-purpose registers, and Floating-point extension regi</description>
+                    <addressOffset>0x4</addressOffset>
+                    <access>write-only</access>
+                    <fields>
+                        <field>
+                            <name>REGWnR</name>
+                            <description>Specifies the access type for the transfer</description>
+                            <bitRange>[16:16]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Read</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Write</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>REGSEL</name>
+                            <description>Specifies the ARM core register, special-purpose register, or Floating-point extension register, to transfer</description>
+                            <bitRange>[6:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>The current SP</description>
+                                    <value>13</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>LR</description>
+                                    <value>14</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>DebugReturnAddress</description>
+                                    <value>15</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>xPSR</description>
+                                    <value>16</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Main stack pointer, MSP</description>
+                                    <value>17</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Process stack pointer, PSP</description>
+                                    <value>18</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Control, Faultmask, Basepri and Primask</description>
+                                    <value>20</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Floating-point Status and Control Register, FPSCR</description>
+                                    <value>33</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Debug Core Register Data Register</name>
+                    <displayName>DCRDR</displayName>
+                    <description>the DCRDR provides debug access to the ARM core registers, special-purpose registers, and Floating-point extensio</description>
+                    <addressOffset>0x8</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>DBGTMP</name>
+                            <description>Data temporary cache, for reading and writing the ARM core registers, special-purpose registers, and Floating-point extension registers</description>
+                            <bitRange>[31:0]</bitRange>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>Debug Exception and Monitor Control Register</name>
+                    <displayName>DEMCR</displayName>
+                    <description>Manages vector catch behavior and DebugMonitor handling when debugging</description>
+                    <addressOffset>0xC</addressOffset>
+                    <access>read-write</access>
+                    <fields>
+                        <field>
+                            <name>TRCENA</name>
+                            <description>Global enable for all DWT and ITM features</description>
+                            <bitRange>[24:24]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>DWT and ITM units disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>DWT and ITM units enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>MON_REQ</name>
+                            <description>DebugMonitor semaphore bit</description>
+                            <bitRange>[19:19]</bitRange>
+                        </field>
+                        <field>
+                            <name>MON_STEP</name>
+                            <description>When MON_EN is set to 0, this feature is disabled and the processor ignores MON_STEP</description>
+                            <bitRange>[18:18]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Do not step the processor</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Step the processor</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>MON_PEND</name>
+                            <description>Sets or clears the pending state of the DebugMonitor exception</description>
+                            <bitRange>[17:17]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Clear the status of the DebugMonitor exception to not pending</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Set the status of the DebugMonitor exception to pending</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>MON_EN</name>
+                            <description>Enable the DebugMonitor exception</description>
+                            <bitRange>[16:16]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>DebugMonitor exception disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>DebugMonitor exception enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_HARDERR</name>
+                            <description>Enable halting debug trap on a HardFault exception</description>
+                            <bitRange>[10:10]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_INTERR</name>
+                            <description>Enable halting debug trap on a fault occurring during exception entry or exception return</description>
+                            <bitRange>[9:9]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_BUSERR</name>
+                            <description>Enable halting debug trap on a BusFault exception</description>
+                            <bitRange>[8:8]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_STATERR</name>
+                            <description>Enable halting debug trap on a UsageFault exception caused by a state information error, for example an Undefined Instruction exception</description>
+                            <bitRange>[7:7]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_CHKERR</name>
+                            <description>Enable halting debug trap on a UsageFault exception caused by a checking error, for example an alignment check error</description>
+                            <bitRange>[6:6]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_NOCPERR</name>
+                            <description>Enable halting debug trap on a UsageFault caused by an access to a Coprocessor</description>
+                            <bitRange>[5:5]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_MMERR</name>
+                            <description>Enable halting debug trap on a MemManage exception</description>
+                            <bitRange>[4:4]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Halting debug trap disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Halting debug trap enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                        <field>
+                            <name>VC_CORERESET</name>
+                            <description>Enable Reset Vector Catch</description>
+                            <bitRange>[0:0]</bitRange>
+                            <enumeratedValues>
+                                <enumeratedValue>
+                                    <description>Reset Vector Catch disabled</description>
+                                    <value>0</value>
+                                </enumeratedValue>
+                                <enumeratedValue>
+                                    <description>Reset Vector Catch enabled</description>
+                                    <value>1</value>
+                                </enumeratedValue>
+                            </enumeratedValues>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+        </peripheral>
+    </peripherals>
+</device>
