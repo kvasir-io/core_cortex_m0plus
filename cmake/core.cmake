@@ -2,7 +2,7 @@ set(TARGET_FLOAT_ABI soft)
 set(TARGET_FPU none)
 set(TARGET_CPU cortex-m0plus)
 set(TARGET_ARCH v6-m)
-set(TARGET_TRIPLE thumbv6-m-none-none-eabi)
+set(TARGET_TRIPLE thumbv6-m-none-eabi)
 set(TARGET_ARM_INSTRUCTION_MODE thumb)
 set(TARGET_ENDIAN little-endian)
 

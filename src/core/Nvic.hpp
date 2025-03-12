@@ -40,7 +40,7 @@ namespace Kvasir { namespace Nvic {
             constexpr auto bd = std::begin(InterruptOffsetTraits<void>::disabled);
             constexpr auto ed = std::end(InterruptOffsetTraits<void>::disabled);
             return I < InterruptOffsetTraits<void>::end && I >= InterruptOffsetTraits<void>::begin
-                && find(bd, ed, I) == ed && find(f, l, I) == l;
+                && Detail::find(bd, ed, I) == ed && Detail::find(f, l, I) == l;
         }
 
     }   // namespace Detail
