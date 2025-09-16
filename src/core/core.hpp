@@ -10,7 +10,6 @@
 #include "core_peripherals/SYSTICK.hpp"
 
 //
-#include "Fault.hpp"
 #include "Nvic.hpp"
 #include "StartUp.hpp"
 #include "SystemControl.hpp"

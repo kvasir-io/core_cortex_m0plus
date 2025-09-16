@@ -6,9 +6,4 @@ set(TARGET_TRIPLE thumbv6-m-none-eabi)
 set(TARGET_ARM_INSTRUCTION_MODE thumb)
 set(TARGET_ENDIAN little-endian)
 
-
-svd_convert(
-  core_peripherals
-  SVD_FILE ${CMAKE_CURRENT_LIST_DIR}/../core.svd
-  OUTPUT_DIRECTORY core_peripherals
-)
+svd_convert(core_peripherals SVD_FILE ${CMAKE_CURRENT_LIST_DIR}/../core.svd OUTPUT_DIRECTORY core_peripherals)
