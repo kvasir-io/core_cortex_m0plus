@@ -51,6 +51,7 @@ namespace Kvasir { namespace Nvic {
     }   // namespace Detail
 
     template<int I>
+        requires(I >= 0)
     struct MakeAction<Action::Enable, Index<I>> : Detail::BlindSet<Detail::baseAddress + 0x000, I> {
         static_assert(Detail::interuptIndexValid(I,
                                                  std::begin(InterruptOffsetTraits<void>::noEnable),
@@ -59,6 +60,7 @@ namespace Kvasir { namespace Nvic {
     };
 
     template<int I>
+        requires(I >= 0)
     struct MakeAction<Action::Read, Index<I>> : Detail::Read<Detail::baseAddress + 0x000, I> {
         static_assert(Detail::interuptIndexValid(I,
                                                  std::begin(InterruptOffsetTraits<void>::noEnable),
@@ -67,6 +69,7 @@ namespace Kvasir { namespace Nvic {
     };
 
     template<int I>
+        requires(I >= 0)
     struct MakeAction<Action::Disable, Index<I>>
       : Detail::BlindSet<Detail::baseAddress + 0x080, I> {
         static_assert(Detail::interuptIndexValid(I,
@@ -76,6 +79,7 @@ namespace Kvasir { namespace Nvic {
     };
 
     template<int I>
+        requires(I >= 0)
     struct MakeAction<Action::SetPending, Index<I>>
       : Detail::BlindSet<Detail::baseAddress + 0x100, I> {
         static_assert(
@@ -86,6 +90,7 @@ namespace Kvasir { namespace Nvic {
     };
 
     template<int I>
+        requires(I >= 0)
     struct MakeAction<Action::ClearPending, Index<I>>
       : Detail::BlindSet<Detail::baseAddress + 0x180, I> {
         static_assert(
@@ -100,6 +105,7 @@ namespace Kvasir { namespace Nvic {
       : Detail::PrioritySet<Detail::baseAddress + 0x300 + (I / 4) * 4, I % 4, Priority> {};
 
     template<int Priority, int I>
+        requires(I >= 0)
     struct MakeAction<Action::SetPriority<Priority>, Index<I>>
       : PriorityDisambiguator<Priority, I> {
         static_assert(3 >= Priority,
