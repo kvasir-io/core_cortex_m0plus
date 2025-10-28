@@ -1,43 +1,38 @@
 #pragma once
 #include "core_peripherals/SCB.hpp"
 #include "kvasir/Register/Register.hpp"
-#include "kvasir/Util/StaticString.hpp"
 
 #include <cstdint>
 #include <optional>
-#include <string_view>
+#include <utility>
 
 using Kvasir::Register::apply;
 using Kvasir::Register::read;
-using Kvasir::Register::write;
 
 namespace Kvasir::Core::Fault {
 
 using SCB_R = Kvasir::Peripheral::SCB::Registers<>;
 
-struct FaultContext {
-    std::uint32_t        r0;
-    std::uint32_t        r1;
-    std::uint32_t        r2;
-    std::uint32_t        r3;
-    std::uint32_t        r12;
-    std::uint32_t        lr;
-    std::uint32_t        pc;
-    std::uint32_t        xpsr;
-    std::uint32_t        exc_return;
-    std::uint32_t const* stack_pointer;
+enum class FaultType : std::uint8_t { Hard };
+
+enum class FaultDescription : std::uint8_t {
+    ExternalDebug,
+    VectorCatch,
+    DWTTrap,
+    Breakpoint,
+    HaltRequest,
+    EscalatedFault
 };
 
 struct FaultInfo {
-    Kvasir::StaticString<64>     type;
-    std::string_view             description;
+    FaultType                    type;
+    FaultDescription             description;
     std::optional<std::uint32_t> fault_address;
     std::uint32_t                status_bits;
 };
 
-static FaultInfo GetFaultInfo() {
-    // Cortex-M0 has limited fault analysis compared to M4
-    // We can only read basic fault status from DFSR and ICSR
+static constexpr FaultInfo GetFaultInfo() {
+    // Cortex-M0 has limited fault analysis - only DFSR and ICSR available
     auto fault_regs = apply(read(SCB_R::DFSR::external),
                             read(SCB_R::DFSR::vcatch),
                             read(SCB_R::DFSR::dwttrap),
@@ -52,75 +47,67 @@ static FaultInfo GetFaultInfo() {
     auto halted     = static_cast<std::uint32_t>(get<4>(fault_regs));
     auto vectactive = static_cast<std::uint32_t>(get<5>(fault_regs));
 
-    std::uint32_t status_bits
+    std::uint32_t const status_bits
       = (external << 4) | (vcatch << 3) | (dwttrap << 2) | (bkpt << 1) | halted;
 
+    FaultInfo info{};
+    info.type = FaultType::Hard;
+
     if(external) {
-        return {"HardFault", "External debug request", std::nullopt, status_bits};
-    } else if(vcatch) {
-        return {"HardFault", "Vector catch", std::nullopt, status_bits};
-    } else if(dwttrap) {
-        return {"HardFault", "DWT trap", std::nullopt, status_bits};
-    } else if(bkpt) {
-        return {"HardFault", "Breakpoint", std::nullopt, status_bits};
-    } else if(halted) {
-        return {"HardFault", "Halt request", std::nullopt, status_bits};
-    } else {
-        // Default HardFault - Cortex-M0 escalates most faults to HardFault
-        return {"HardFault", "Escalated fault (M0 limited analysis)", std::nullopt, vectactive};
+        info.description = FaultDescription::ExternalDebug;
+        info.status_bits = status_bits;
+        return info;
     }
+    if(vcatch) {
+        info.description = FaultDescription::VectorCatch;
+        info.status_bits = status_bits;
+        return info;
+    }
+    if(dwttrap) {
+        info.description = FaultDescription::DWTTrap;
+        info.status_bits = status_bits;
+        return info;
+    }
+    if(bkpt) {
+        info.description = FaultDescription::Breakpoint;
+        info.status_bits = status_bits;
+        return info;
+    }
+    if(halted) {
+        info.description = FaultDescription::HaltRequest;
+        info.status_bits = status_bits;
+        return info;
+    }
+
+    // Default: Cortex-M0 escalates most faults to HardFault
+    info.description = FaultDescription::EscalatedFault;
+    info.status_bits = vectactive;
+    return info;
 }
 
-static FaultContext CaptureFaultContext(std::uint32_t const* stack_ptr,
-                                        std::uint32_t        lr_value) {
-    FaultContext ctx{};
+using EarlyInitList = decltype(MPL::list());
 
-    ctx.r0            = stack_ptr[0];
-    ctx.r1            = stack_ptr[1];
-    ctx.r2            = stack_ptr[2];
-    ctx.r3            = stack_ptr[3];
-    ctx.r12           = stack_ptr[4];
-    ctx.lr            = stack_ptr[5];
-    ctx.pc            = stack_ptr[6];
-    ctx.xpsr          = stack_ptr[7];
-    ctx.exc_return    = lr_value;
-    ctx.stack_pointer = stack_ptr;
-
-    return ctx;
-}
-
-static constexpr std::pair<std::string_view,
-                           std::uint32_t>
-info() {
-    using namespace std::literals;
-    return {"HardFault"sv, 0};
-}
-
-static inline void Log(std::uint32_t const* stack_ptr,
-                       std::uint32_t        lr_value) {
-    [[maybe_unused]] auto const ctx        = Core::Fault::CaptureFaultContext(stack_ptr, lr_value);
-    auto                        fault_info = Core::Fault::GetFaultInfo();
-
-    // For Cortex-M0, we don't have fault address registers
-    // Use a placeholder or omit the address field
-    [[maybe_unused]] auto fault_addr = fault_info.fault_address.value_or(0);
+static inline void Log([[maybe_unused]] std::uint32_t const* stack_ptr,
+                       [[maybe_unused]] std::uint32_t        lr_value) {
+    [[maybe_unused]] FaultInfo const fault_info = Core::Fault::GetFaultInfo();
 
     UC_LOG_C(
-      "COREFAULT type({}) info({}) flags({:#08x}) address({:#08x}) "
+      "COREFAULT type({}Fault) info({}) flags({:#08x}) address({:#08x}) "
       "registers: PC={:#08x} R0={:#08x} R1={:#08x} R2={:#08x} R3={:#08x} R12={:#08x} LR={:#08x} "
-      "xPSR={:#08x}",
+      "xPSR={:#08x} EXC_RETURN={:#08x}",
       fault_info.type,
       fault_info.description,
       fault_info.status_bits,
-      fault_addr,
-      ctx.pc,
-      ctx.r0,
-      ctx.r1,
-      ctx.r2,
-      ctx.r3,
-      ctx.r12,
-      ctx.lr,
-      ctx.xpsr);
+      fault_info.fault_address,
+      stack_ptr[6],
+      stack_ptr[0],
+      stack_ptr[1],
+      stack_ptr[2],
+      stack_ptr[3],
+      stack_ptr[4],
+      stack_ptr[5],
+      stack_ptr[7],
+      lr_value);
 }
 
 };   // namespace Kvasir::Core::Fault

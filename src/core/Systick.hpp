@@ -133,7 +133,8 @@ namespace Systick {
             std::uint64_t NanoSecPerOverrun
               = ((std::uint64_t(calcReloadValue(clockSpeed)) + 1ULL) * 1'000'000'000ULL)
               / clockSpeed;
-            return std::uint64_t(overrunTime.count()) / NanoSecPerOverrun;
+            return (std::uint64_t(overrunTime.count()) + NanoSecPerOverrun - 1ULL)
+                 / NanoSecPerOverrun;
         }
 
         using overrunT = GetOverrunTypeT<calcOverRunValue(ClockSpeed, Config::minOverrunTime)>;
@@ -173,12 +174,11 @@ namespace Systick {
             while(true) {
                 currentCount  = apply(read(Regs::CVR::current));
                 localOverruns = overruns.load(std::memory_order_relaxed);
-                if(!fieldEquals(Regs::CSR::COUNTFLAGValC::timer_has_counted_to_0)) {
-                    break;
-                }
+                if(!fieldEquals(Regs::CSR::COUNTFLAGValC::timer_has_counted_to_0)) { break; }
             }
             auto const cnd  = duration{reloadValue - currentCount};
-            auto const ovd  = duration{localOverruns * (reloadValue + 1)};
+            auto const ovd  = duration{static_cast<std::uint64_t>(localOverruns)
+                                      * static_cast<std::uint64_t>(reloadValue + 1)};
             auto const time = time_point{cnd + ovd};
             return time;
         }
@@ -228,3 +228,4 @@ namespace Systick {
     };
 }   // namespace Systick
 }   // namespace Kvasir
+
