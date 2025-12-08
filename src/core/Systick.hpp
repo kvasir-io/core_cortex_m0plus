@@ -228,4 +228,3 @@ namespace Systick {
     };
 }   // namespace Systick
 }   // namespace Kvasir
-

@@ -31,9 +31,7 @@ namespace Kvasir { namespace Nvic {
                                InputIt  last,
                                T const& value) {
             for(; first != last; ++first) {
-                if(*first == value) {
-                    return first;
-                }
+                if(*first == value) { return first; }
             }
             return last;
         }
