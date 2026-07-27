@@ -178,7 +178,7 @@ namespace Systick {
             }
             auto const cnd  = duration{reloadValue - currentCount};
             auto const ovd  = duration{static_cast<std::uint64_t>(localOverruns)
-                                      * static_cast<std::uint64_t>(reloadValue + 1)};
+                                       * static_cast<std::uint64_t>(reloadValue + 1)};
             auto const time = time_point{cnd + ovd};
             return time;
         }
