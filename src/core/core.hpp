@@ -10,6 +10,7 @@
 #include "core_peripherals/SYSTICK.hpp"
 
 //
+#include "Barrier.hpp"
 #include "CoreInterrupts.hpp"
 #include "Nvic.hpp"
 #include "StartUp.hpp"

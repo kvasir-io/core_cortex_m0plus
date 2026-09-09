@@ -5,6 +5,10 @@
 #include "kvasir/Common/Interrupt.hpp"
 #include "kvasir/Mpl/Utility.hpp"
 #include "kvasir/Register/Register.hpp"
+#include "kvasir/StartUp/Resources.hpp"
+
+#include <type_traits>
+#include <utility>
 
 namespace Kvasir { namespace Nvic {
     namespace Detail {
@@ -115,3 +119,40 @@ namespace Kvasir { namespace Nvic {
           "Unable to set priority on this interrupt, index is out of range");
     };
 }}   // namespace Kvasir::Nvic
+
+// What an init step enables (kvasir/StartUp/Resources.hpp, InterruptOfAction): a literal
+// write of SETENA bits in ISER enables index b for every set bit b (the Cortex-M0+ has the
+// one register). Startup then requires an Isr on each such index in the same core's list.
+namespace Kvasir { namespace Startup {
+    namespace Detail {
+        using NvicIser = Kvasir::Peripheral::NVIC::Registers<>::ISER<0>;
+
+        template<unsigned Value,
+                 int... Bits>
+        constexpr auto enabledIndexes(std::integer_sequence<int,
+                                                            Bits...>) {
+            return brigand::flatten<
+              brigand::list<std::conditional_t<((Value >> Bits) & 1U) != 0,
+                                               brigand::list<std::integral_constant<int, Bits>>,
+                                               brigand::list<>>...>>{};
+        }
+    }   // namespace Detail
+
+    template<unsigned Addr,
+             unsigned Z,
+             unsigned O,
+             typename RegType,
+             typename Mode,
+             unsigned Mask,
+             typename Access,
+             typename FieldType,
+             unsigned Value>
+        requires(Addr == Detail::NvicIser::Addr::value && (Value & Mask) != 0)
+    struct InterruptOfAction<Register::Action<
+      Register::
+        FieldLocation<Register::Address<Addr, Z, O, RegType, Mode>, Mask, Access, FieldType>,
+      Register::WriteLiteralAction<Value>>> {
+        using type
+          = decltype(Detail::enabledIndexes<(Value & Mask)>(std::make_integer_sequence<int, 32>{}));
+    };
+}}   // namespace Kvasir::Startup
