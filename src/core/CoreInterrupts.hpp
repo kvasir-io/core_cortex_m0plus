@@ -1,15 +1,8 @@
 #pragma once
-#include "kvasir/Common/Interrupt.hpp"
+
+// The common exceptions come from core_cortex_common; a Cortex-M0+ has no others.
+#include "cortex_common/CoreInterrupts.hpp"
 
 namespace Kvasir {
-template<int I>
-using Type = ::Kvasir::Nvic::Index<I>;
-
-struct CoreInterrupts {
-    static constexpr Type<-14> nonMaskableInt{};
-    static constexpr Type<-13> hardFault{};
-    static constexpr Type<-5>  sVCall{};
-    static constexpr Type<-2>  pendSV{};
-    static constexpr Type<-1>  systick{};
-};
+struct CoreInterrupts : CommonCoreInterrupts {};
 }   // namespace Kvasir

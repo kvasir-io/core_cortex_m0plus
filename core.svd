@@ -410,7 +410,7 @@
             <baseAddress>0xE000E100</baseAddress>
             <addressBlock>
                 <offset>0x0</offset>
-                <size>0x4F0</size>
+                <size>0x320</size>
                 <usage>registers</usage>
             </addressBlock>
             <registers>
@@ -419,7 +419,7 @@
                     <displayName>NVIC_ISER_%s</displayName>
                     <description>Enables, or reads the enable state of a group of interrupts</description>
                     <addressOffset>0x0</addressOffset>
-                    <dim>16</dim>
+                    <dim>1</dim>
                     <dimIncrement>4</dimIncrement>
                     <access>read-write</access>
                     <fields>
@@ -429,13 +429,14 @@
                             <bitRange>[0:0]</bitRange>
                             <dim>32</dim>
                             <dimIncrement>1</dimIncrement>
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt disabled</description>
+                                    <description>No effect</description>
                                     <value>0</value>
                                 </enumeratedValue>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt enabled</description>
+                                    <description>Enable interrupt</description>
                                     <value>1</value>
                                 </enumeratedValue>
                             </enumeratedValues>
@@ -447,7 +448,7 @@
                     <displayName>NVIC_ICER_%s</displayName>
                     <description>Disables, or reads the enable state of, a group of registers</description>
                     <addressOffset>0x80</addressOffset>
-                    <dim>16</dim>
+                    <dim>1</dim>
                     <dimIncrement>4</dimIncrement>
                     <access>read-write</access>
                     <fields>
@@ -457,13 +458,14 @@
                             <bitRange>[0:0]</bitRange>
                             <dim>32</dim>
                             <dimIncrement>1</dimIncrement>
+                            <modifiedWriteValues>oneToClear</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt disabled</description>
+                                    <description>No effect</description>
                                     <value>0</value>
                                 </enumeratedValue>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt enabled</description>
+                                    <description>Disable interrupt</description>
                                     <value>1</value>
                                 </enumeratedValue>
                             </enumeratedValues>
@@ -475,7 +477,7 @@
                     <displayName>NVIC_ISPR_%s</displayName>
                     <description>For a group of interrupts, changes interrupt status to pending, or shows the current pending status</description>
                     <addressOffset>0x100</addressOffset>
-                    <dim>16</dim>
+                    <dim>1</dim>
                     <dimIncrement>4</dimIncrement>
                     <access>read-write</access>
                     <fields>
@@ -485,13 +487,14 @@
                             <bitRange>[0:0]</bitRange>
                             <dim>32</dim>
                             <dimIncrement>1</dimIncrement>
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt is not pending</description>
+                                    <description>No effect</description>
                                     <value>0</value>
                                 </enumeratedValue>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt is pending</description>
+                                    <description>Pend interrupt</description>
                                     <value>1</value>
                                 </enumeratedValue>
                             </enumeratedValues>
@@ -503,7 +506,7 @@
                     <displayName>NVIC_ICPR_%s</displayName>
                     <description>For a group of interrupts, clears the interrupt pending status, or shows the current pending status</description>
                     <addressOffset>0x180</addressOffset>
-                    <dim>16</dim>
+                    <dim>1</dim>
                     <dimIncrement>4</dimIncrement>
                     <access>read-write</access>
                     <fields>
@@ -513,13 +516,14 @@
                             <bitRange>[0:0]</bitRange>
                             <dim>32</dim>
                             <dimIncrement>1</dimIncrement>
+                            <modifiedWriteValues>oneToClear</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt is not pending</description>
+                                    <description>No effect</description>
                                     <value>0</value>
                                 </enumeratedValue>
                                 <enumeratedValue>
-                                    <description>On reads, interrupt is pending</description>
+                                    <description>Clear pending state of interrupt</description>
                                     <value>1</value>
                                 </enumeratedValue>
                             </enumeratedValues>
@@ -531,29 +535,17 @@
                     <displayName>NVIC_IPR_%s</displayName>
                     <description>Sets or reads interrupt priorities</description>
                     <addressOffset>0x300</addressOffset>
-                    <dim>124</dim>
+                    <dim>8</dim>
                     <dimIncrement>4</dimIncrement>
                     <access>read-write</access>
                     <fields>
                         <field>
-                            <name>PRI_N3</name>
-                            <description>For register NVIC_IPRn, priority of interrupt number 4n+3</description>
-                            <bitRange>[31:24]</bitRange>
-                        </field>
-                        <field>
-                            <name>PRI_N2</name>
-                            <description>For register NVIC_IPRn, priority of interrupt number 4n+2</description>
-                            <bitRange>[23:16]</bitRange>
-                        </field>
-                        <field>
-                            <name>PRI_N1</name>
-                            <description>For register NVIC_IPRn, priority of interrupt number 4n+1</description>
-                            <bitRange>[15:8]</bitRange>
-                        </field>
-                        <field>
-                            <name>PRI_N0</name>
-                            <description>For register NVIC_IPRn, priority of interrupt number 4n</description>
-                            <bitRange>[7:0]</bitRange>
+                            <name>PRI_%s</name>
+                            <description>Priority of interrupt 4n+m. The Cortex-M0+ implements the top two bits of each byte, [7:6]; the rest read as zero and ignore writes</description>
+                            <bitOffset>6</bitOffset>
+                            <bitWidth>2</bitWidth>
+                            <dim>4</dim>
+                            <dimIncrement>8</dimIncrement>
                         </field>
                     </fields>
                 </register>
@@ -927,7 +919,7 @@
                         <field>
                             <name>PRI_11</name>
                             <description>Priority of system handler 11, SVCall</description>
-                            <bitRange>[31:24]</bitRange>
+                            <bitRange>[31:30]</bitRange>
                         </field>
                     </fields>
                 </register>
@@ -941,12 +933,12 @@
                         <field>
                             <name>PRI_15</name>
                             <description>Priority of system handler 15, SysTick</description>
-                            <bitRange>[31:24]</bitRange>
+                            <bitRange>[31:30]</bitRange>
                         </field>
                         <field>
                             <name>PRI_14</name>
                             <description>Priority of system handler 14, PendSV</description>
-                            <bitRange>[23:16]</bitRange>
+                            <bitRange>[23:22]</bitRange>
                         </field>
                     </fields>
                 </register>
