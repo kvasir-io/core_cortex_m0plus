@@ -778,6 +778,13 @@
                                     <value>0x05FA</value>
                                 </enumeratedValue>
                             </enumeratedValues>
+                            <!-- Kvasir: a key, every write must carry it; Armv6-M ARM DDI0419E, AIRCR (line 8743 of the converted text): WO, 0x05FA must be written, otherwise UNPREDICTABLE -->
+                            <writeConstraint>
+                                <range>
+                                    <minimum>0x05FA</minimum>
+                                    <maximum>0x05FA</maximum>
+                                </range>
+                            </writeConstraint>
                         </field>
                         <field>
                             <name>ENDIANNESS</name>
