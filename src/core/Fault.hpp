@@ -16,14 +16,13 @@ using SCB_R = Kvasir::Peripheral::SCB::Registers<>;
 
 enum class FaultType : std::uint8_t { Hard };
 
-enum class FaultDescription : std::uint8_t {
-    ExternalDebug,
-    VectorCatch,
-    DWTTrap,
-    Breakpoint,
-    HaltRequest,
-    EscalatedFault
-};
+// Armv6-M has no fault status registers: every fault is a HardFault. DFSR (and SHCSR) belong
+// to the Debug Extension (DDI0419E, SCB table footnote d, md l.8547), "access from the
+// processor is IMPLEMENTATION DEFINED" (C1.6, md l.10865), and the Cortex-M0+ TRM lists DFSR
+// with the debug registers that "software cannot access" (DDI0484C 7.2, Table 7-6 and the
+// Note at its end, md l.1612-1669). So nothing is read from them: what they return is
+// unspecified.
+enum class FaultDescription : std::uint8_t { EscalatedFault };
 
 struct FaultInfo {
     FaultType                    type;
@@ -33,57 +32,32 @@ struct FaultInfo {
 };
 
 static constexpr FaultInfo GetFaultInfo() {
-    // Cortex-M0 has limited fault analysis - only DFSR and ICSR available
-    auto fault_regs = apply(read(SCB_R::DFSR::external),
-                            read(SCB_R::DFSR::vcatch),
-                            read(SCB_R::DFSR::dwttrap),
-                            read(SCB_R::DFSR::bkpt),
-                            read(SCB_R::DFSR::halted),
-                            read(SCB_R::ICSR::vectactive));
-
-    auto external   = static_cast<std::uint32_t>(get<0>(fault_regs));
-    auto vcatch     = static_cast<std::uint32_t>(get<1>(fault_regs));
-    auto dwttrap    = static_cast<std::uint32_t>(get<2>(fault_regs));
-    auto bkpt       = static_cast<std::uint32_t>(get<3>(fault_regs));
-    auto halted     = static_cast<std::uint32_t>(get<4>(fault_regs));
-    auto vectactive = static_cast<std::uint32_t>(get<5>(fault_regs));
-
-    std::uint32_t const status_bits
-      = (external << 4) | (vcatch << 3) | (dwttrap << 2) | (bkpt << 1) | halted;
-
     FaultInfo info{};
-    info.type = FaultType::Hard;
-
-    if(external) {
-        info.description = FaultDescription::ExternalDebug;
-        info.status_bits = status_bits;
-        return info;
-    }
-    if(vcatch) {
-        info.description = FaultDescription::VectorCatch;
-        info.status_bits = status_bits;
-        return info;
-    }
-    if(dwttrap) {
-        info.description = FaultDescription::DWTTrap;
-        info.status_bits = status_bits;
-        return info;
-    }
-    if(bkpt) {
-        info.description = FaultDescription::Breakpoint;
-        info.status_bits = status_bits;
-        return info;
-    }
-    if(halted) {
-        info.description = FaultDescription::HaltRequest;
-        info.status_bits = status_bits;
-        return info;
-    }
-
-    // Default: Cortex-M0 escalates most faults to HardFault
+    info.type        = FaultType::Hard;
     info.description = FaultDescription::EscalatedFault;
-    info.status_bits = vectactive;
+    info.status_bits = static_cast<std::uint32_t>(apply(read(SCB_R::ICSR::vectactive)));
     return info;
+}
+
+// A plain copy of the fault registers for the SDK's full fault record (Kvasir::CrashRecord::Full,
+// FaultHandler.hpp): no analysis, no log, nothing that can fault. Addresses from the Armv6-M ARM DDI0419E SCB table (md l.8539).
+struct Snapshot {
+    std::uint32_t cfsr, hfsr, mmfar, bfar, shcsr, icsr, sfsr, sfar;
+    bool          faultRegs;   // Armv6-M has no fault status registers: all 0
+    bool          secureRegs;
+};
+
+inline Snapshot snapshot() {
+    return Snapshot{.cfsr       = 0,
+                    .hfsr       = 0,
+                    .mmfar      = 0,
+                    .bfar       = 0,
+                    .shcsr      = 0,   // Debug Extension only, not readable by software (see above)
+                    .icsr       = *reinterpret_cast<std::uint32_t const volatile*>(0xE000'ED04),
+                    .sfsr       = 0,
+                    .sfar       = 0,
+                    .faultRegs  = false,
+                    .secureRegs = false};
 }
 
 using EarlyInitList = decltype(MPL::list());
