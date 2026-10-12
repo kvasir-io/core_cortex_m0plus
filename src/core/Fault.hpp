@@ -60,6 +60,12 @@ inline Snapshot snapshot() {
                     .secureRegs = false};
 }
 
+// No CFSR/HFSR on Armv6-M (above): nothing to clear.
+inline void clearFaultStatus(std::uint32_t,
+                             std::uint32_t) {}
+
+inline void clearFaultStatus() {}
+
 using EarlyInitList = decltype(MPL::list());
 
 static inline void Log([[maybe_unused]] std::uint32_t const* stack_ptr,
