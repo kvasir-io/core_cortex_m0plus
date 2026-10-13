@@ -48,16 +48,17 @@ struct Snapshot {
 };
 
 inline Snapshot snapshot() {
-    return Snapshot{.cfsr       = 0,
-                    .hfsr       = 0,
-                    .mmfar      = 0,
-                    .bfar       = 0,
-                    .shcsr      = 0,   // Debug Extension only, not readable by software (see above)
-                    .icsr       = *reinterpret_cast<std::uint32_t const volatile*>(0xE000'ED04),
-                    .sfsr       = 0,
-                    .sfar       = 0,
-                    .faultRegs  = false,
-                    .secureRegs = false};
+    return Snapshot{
+      .cfsr  = 0,
+      .hfsr  = 0,
+      .mmfar = 0,
+      .bfar  = 0,
+      .shcsr = 0,   // Debug Extension only, not readable by software (see above)
+      .icsr = Kvasir::Register::readWhole(Kvasir::Peripheral::SCB::Registers<>::ICSR::FULLREGISTER),
+      .sfsr = 0,
+      .sfar = 0,
+      .faultRegs  = false,
+      .secureRegs = false};
 }
 
 // No CFSR/HFSR on Armv6-M (above): nothing to clear.

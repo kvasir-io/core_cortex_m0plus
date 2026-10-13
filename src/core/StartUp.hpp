@@ -19,14 +19,14 @@ static void startup() {}
     using SYSTICK_R = Kvasir::Peripheral::SYSTICK::Registers<>;
     using Kvasir::Register::apply;
     using Kvasir::Register::clear;
+    using Kvasir::Register::set;
     using Kvasir::Register::write;
     // SYST_CSR (Armv6-M ARM DDI0419E B3.3.3): ENABLE and TICKINT off; CLKSOURCE kept, its reset value is
     // IMPLEMENTATION DEFINED (Table B3-13 "0x00000000 or 0x00000004") and SystickClock writes it anyway
     apply(clear(SYSTICK_R::CSR::enable), clear(SYSTICK_R::CSR::tickint));
-    // ICSR (B3.2.4, Table B3-6): PENDSVCLR | PENDSTCLR as one whole-register write - never with a SET bit, which a
-    // field write's read-modify-write could write back as read (UNPREDICTABLE together with its CLR bit)
-    apply(
-      write(SCB_R::ICSR::FULLREGISTER, SCB_R::ICSR::pendsvclr.Mask | SCB_R::ICSR::pendstclr.Mask));
+    // ICSR (B3.2.4, Table B3-6): PENDSVCLR and PENDSTCLR written over the register's defaults, one store
+    // and no read; the SVD leaves the RO status fields read-write, so a plain set() would read first.
+    apply(SCB_R::ICSR::overrideDefaults(set(SCB_R::ICSR::pendsvclr), set(SCB_R::ICSR::pendstclr)));
     // VTOR (B3.2.5: RAZ/WI where not implemented)
     apply(
       write(SCB_R::VTOR::FULLREGISTER,

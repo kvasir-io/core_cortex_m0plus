@@ -607,6 +607,8 @@
                             <name>NMIPENDSET</name>
                             <description>On writes, makes the NMI exception active</description>
                             <bitRange>[31:31]</bitRange>
+                            <!-- Kvasir: Armv6-M ARM DDI0419E B3.2.4, Table B3-6: a 1 sets the exception pending, a 0 is ignored -->
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
                                     <name>cleared</name>
@@ -624,6 +626,8 @@
                             <name>PENDSVSET</name>
                             <description>On writes, sets the PendSV exception as pending</description>
                             <bitRange>[28:28]</bitRange>
+                            <!-- Kvasir: Armv6-M ARM DDI0419E B3.2.4, Table B3-6: a 1 sets the exception pending, a 0 is ignored -->
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
                                     <name>cleared</name>
@@ -641,6 +645,8 @@
                             <name>PENDSVCLR</name>
                             <description>Removes the pending status of the PendSV exception</description>
                             <bitRange>[27:27]</bitRange>
+                            <!-- Kvasir: Armv6-M ARM DDI0419E B3.2.4, Table B3-6: a 1 clears its pending state, reads 0, a 0 is ignored -->
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
                                     <description>No effect</description>
@@ -657,6 +663,8 @@
                             <name>PENDSTSET</name>
                             <description>On writes, sets the SysTick exception as pending</description>
                             <bitRange>[26:26]</bitRange>
+                            <!-- Kvasir: Armv6-M ARM DDI0419E B3.2.4, Table B3-6: a 1 sets the exception pending, a 0 is ignored -->
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
                                     <name>cleared</name>
@@ -674,6 +682,8 @@
                             <name>PENDSTCLR</name>
                             <description>Removes the pending status of the SysTick exception</description>
                             <bitRange>[25:25]</bitRange>
+                            <!-- Kvasir: Armv6-M ARM DDI0419E B3.2.4, Table B3-6: a 1 clears its pending state, reads 0, a 0 is ignored -->
+                            <modifiedWriteValues>oneToSet</modifiedWriteValues>
                             <enumeratedValues>
                                 <enumeratedValue>
                                     <description>No effect</description>
