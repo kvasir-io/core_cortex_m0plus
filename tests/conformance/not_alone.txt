@@ -1,0 +1,1 @@
+# Headers that do not compile alone right after kvasir_config.hpp yet: <dir>/<file> <reason>.

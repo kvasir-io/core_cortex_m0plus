@@ -1,0 +1,3 @@
+# Core templates instantiate.cpp does not instantiate, one reason per line. The core layer's register writes are the NVIC
+# actions, SysTick and the reset request (instantiated there); the rest has no dependent register write.
+Systick.hpp                  SystickClockBase's syncTo() refuses a clock without Config::synchronised: it is used through now()
