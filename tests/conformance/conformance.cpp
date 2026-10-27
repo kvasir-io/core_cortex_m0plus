@@ -36,11 +36,11 @@ KVASIR_CORE_CONFORMANCE_REQUIRE(
 // the fault handler's other two calls (Runtime/FaultHandler.hpp): the COREFAULT line from the snapshot it took, and
 // the Startup actions that enable the core's fault exceptions
 KVASIR_CORE_CONFORMANCE_REQUIRE(
-  "Fault::Core::Log(frame, excReturn, Snapshot const&) / EarlyInitList",
+  "Fault::Core::log(frame, excReturn, Snapshot const&) / EarlyInitList",
   requires(std::uint32_t const*                 frame,
            std::uint32_t                        excReturn,
            Kvasir::Fault::Core::Snapshot const& s) {
-      { Kvasir::Fault::Core::Log(frame, excReturn, s) } -> std::same_as<void>;
+      { Kvasir::Fault::Core::log(frame, excReturn, s) } -> std::same_as<void>;
       typename Kvasir::Fault::Core::EarlyInitList;
   });
 // NVIC, SysTick, the reset request
