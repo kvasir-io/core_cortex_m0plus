@@ -28,15 +28,18 @@ jobs:
                 pacman -S --noconfirm --disable-download-timeout git cmake ninja base-devel python
 
             - name: Checkout repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                 submodules: true
 
+            # Release with its assert()s, the way firmware ships: -O3 without -DNDEBUG; the USE_* options reach the SDK's
+            # svd_converter in the tree (a cmake_helpers project: no NDEBUG, LTO or -march=native)
             - name: Decoder tests on this core.svd
               run: |
-                cmake -S src/cortex_common/tests -B build/decoders -G Ninja -DCORE_CORTEX_M0PLUS_ROOT="$GITHUB_WORKSPACE"
+                cmake -S src/cortex_common/tests -B build/decoders -G Ninja -DCORE_CORTEX_M0PLUS_ROOT="$GITHUB_WORKSPACE" \
+                    -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE=-O3 -DUSE_NDEBUG=OFF -DUSE_LTO=OFF -DUSE_NATIVE_FLAG=OFF
                 cmake --build build/decoders
-                ctest --test-dir build/decoders --output-on-failure -R '_m0plus$'
+                ctest --test-dir build/decoders --output-on-failure -j"$(nproc)" -R '_m0plus$'
 
     conformance:
         uses: kvasir-io/Kvasir_SDK/.github/workflows/package-conformance.yml@master
